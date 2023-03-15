@@ -18,7 +18,28 @@ const userSchema = new mongoose.Schema(
       require: [true, "Please Provide your email!"],
       unique: true,
     },
+
+    Designation: {
+      type: String,
+    },
     photo: String,
+
+    Address: {
+      type: String,
+    },
+
+    CompanyName: {
+      type: String,
+    },
+
+    GstNumber: {
+      type: String,
+    },
+
+    PanNumber: {
+      type: String,
+    },
+
     role: {
       type: String,
       enum: ["user", "admin"],

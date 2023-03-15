@@ -24,3 +24,23 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     me,
   });
 });
+
+exports.updateCompanyLogo = catchAsync(async (req, res, next) => {
+  console.log(req.file);
+  const id = req.user._id;
+  const fileName = "logo.png";
+  const me = await User.findByIdAndUpdate(
+    id,
+    {
+      photo: fileName,
+    },
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json({
+    status: "Success",
+    me,
+  });
+});
