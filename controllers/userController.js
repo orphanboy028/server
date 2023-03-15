@@ -1,6 +1,25 @@
 const catchAsync = require("../utils/catchAsync");
+const path = require("path");
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
+const multer = require("multer");
+// require("../../frontend/public/company-logos");
+
+const multerstorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.resolve(`${__dirname}/../../frontend/public/company-logos`));
+  },
+  filename: function (req, file, cb) {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `user-${req.user._id}-${Date.now()}.${ext}`);
+  },
+});
+
+const upload = multer({
+  storage: multerstorage,
+});
+
+exports.uploadCompanyLogo = upload.single("photo");
 
 // get user details
 exports.getMe = catchAsync(async (req, res, next) => {
@@ -28,11 +47,12 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
 exports.updateCompanyLogo = catchAsync(async (req, res, next) => {
   console.log(req.file);
   const id = req.user._id;
-  const fileName = "logo.png";
+  const photoname = req.file.filename;
+  console.log(photoname);
   const me = await User.findByIdAndUpdate(
     id,
     {
-      photo: fileName,
+      photo: photoname,
     },
     {
       new: true,
