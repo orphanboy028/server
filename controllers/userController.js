@@ -12,3 +12,15 @@ exports.getMe = catchAsync(async (req, res, next) => {
     me,
   });
 });
+
+exports.updateProfile = catchAsync(async (req, res, next) => {
+  const id = req.user._id;
+  const me = await User.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+
+  res.status(200).json({
+    status: "Success",
+    me,
+  });
+});

@@ -12,6 +12,11 @@ router
     authController.protect,
     authController.restricTO("user"),
     userController.getMe
+  )
+  .patch(
+    authController.protect,
+    authController.restricTO("user"),
+    userController.updateProfile
   );
 
 module.exports = router;
