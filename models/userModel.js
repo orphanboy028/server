@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema(
     mobileNumber: {
       type: Number,
       require: [true, "Please Provide your email!"],
-      unique: true,
     },
 
     Designation: {

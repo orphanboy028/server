@@ -143,6 +143,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // pendng....
 
   // Grant acces to Protected Route
+
   req.user = freshUser;
   next();
 });

@@ -3,7 +3,6 @@ const path = require("path");
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
 const multer = require("multer");
-// require("../../frontend/public/company-logos");
 
 const multerstorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,7 +22,6 @@ exports.uploadCompanyLogo = upload.single("photo");
 
 // get user details
 exports.getMe = catchAsync(async (req, res, next) => {
-  console.log(req.user._id);
   const me = await User.findById(req.user._id);
 
   res.status(200).json({
@@ -45,7 +43,6 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.updateCompanyLogo = catchAsync(async (req, res, next) => {
-  console.log(req.file);
   const id = req.user._id;
   const photoname = req.file.filename;
   console.log(photoname);
