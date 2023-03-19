@@ -32,7 +32,12 @@ exports.uploadLefCategoriesImage = upload.single("lefcategoryImage");
 ///////////////////////////////
 // Get All category
 exports.getAllCategories = catchAsync(async (req, res, next) => {
-  const allCategories = await Categories.find();
+  const allCategories = await Categories.find().populate({
+    path: "subCategory",
+    populate: {
+      path: "lefCategory",
+    },
+  });
   //Category Response
   res.status(200).json({
     status: "Success",
@@ -41,11 +46,21 @@ exports.getAllCategories = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getAllSubCategories = catchAsync(async (req, res, next) => {
+  const allSubCategories = await SubCategory.find().populate("lefCategory");
+  //Category Response
+  res.status(200).json({
+    status: "Success",
+    results: allSubCategories.length,
+    allSubCategories,
+  });
+});
+
 exports.getSubCategories = catchAsync(async (req, res, next) => {
   const { categorySlug } = req.params;
   const getAllSubCategories = await SubCategory.find({
     categorySlug: categorySlug,
-  });
+  }).populate("lefCategory");
 
   res.status(200).json({
     status: "Success",

@@ -5,6 +5,9 @@ const categoryController = require("../controllers/categoryController");
 
 router.route("/getAll-categories").get(categoryController.getAllCategories);
 router
+  .route("/getAll-subcategories")
+  .get(categoryController.getAllSubCategories);
+router
   .route("/getAll-sub-categories/:categorySlug")
   .get(categoryController.getSubCategories);
 router
