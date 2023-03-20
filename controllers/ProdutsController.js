@@ -26,7 +26,9 @@ exports.uploadProductFeatureImage = upload.single("images");
 exports.uploadProductsGalleryImages = upload.array("imageGallery", 12);
 
 exports.createProduct = catchAsync(async (req, res, next) => {
-  const createProduct = await Produts.create(req.body);
+  // Add the user ID to the request body using Object.assign
+  const productData = Object.assign(req.body, { user: req.user._id });
+  const createProduct = await Produts.create(productData);
 
   res.status(200).json({
     status: "Success",

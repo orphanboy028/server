@@ -56,6 +56,14 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed,
     required: true,
   },
+
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+});
+
+productSchema.pre("save", function (next) {
+  // Access the user ID through `this.user`
+  this.user = this.user || this.getQuery().user;
+  next();
 });
 
 const Produts = mongoose.model("Products", productSchema);
