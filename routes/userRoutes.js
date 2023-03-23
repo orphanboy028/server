@@ -27,4 +27,12 @@ router
     userController.uploadCompanyLogo,
     userController.updateCompanyLogo
   );
+
+router
+  .route("/users")
+  .get(
+    authController.protect,
+    authController.restricTO("user", "admin"),
+    userController.getAllUser
+  );
 module.exports = router;

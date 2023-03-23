@@ -5,7 +5,7 @@ const Produts = require("../models/ProductsModel");
 const multer = require("multer");
 
 // update feature image
-const multerstorage = multer.diskStorage({
+const Gallerymulterstorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(
       null,
@@ -18,17 +18,41 @@ const multerstorage = multer.diskStorage({
   },
 });
 
-const upload = multer({
-  storage: multerstorage,
+const uploadGallery = multer({
+  storage: Gallerymulterstorage,
 });
 
-exports.uploadProductFeatureImage = upload.single("images");
-exports.uploadProductsGalleryImages = upload.array("imageGallery", 12);
+exports.uploadProductsGalleryImages = uploadGallery.array("imageGallery", 12);
+
+const Featuremulterstorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(
+      null,
+      path.resolve(`${__dirname}/../../frontend/public/Products-images`)
+    );
+  },
+  filename: function (req, file, cb) {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `user-${req.user._id}-${Date.now()}.${ext}`);
+  },
+});
+
+const uploadFeature = multer({
+  storage: Featuremulterstorage,
+});
+
+exports.uploadProductFeatureImage = uploadFeature.single("images");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
   // Add the user ID to the request body using Object.assign
-  const productData = Object.assign(req.body, { user: req.user._id });
-  const createProduct = await Produts.create(productData);
+  // const productData = Object.assign(req.body, { user: req.user._id });
+  const { name, price, description, user } = req.body;
+  const createProduct = await Produts.create({
+    name,
+    price,
+    description,
+    user: req.user._id,
+  });
 
   res.status(200).json({
     status: "Success",
@@ -38,7 +62,8 @@ exports.createProduct = catchAsync(async (req, res, next) => {
 
 exports.updateFeatureImage = catchAsync(async (req, res, next) => {
   const { productId, productname } = req.body;
-  const photoname = req.files.filename;
+  const photoname = req.file.filename;
+  console.log(photoname);
 
   const fetureImage = await Produts.findByIdAndUpdate(
     productId,

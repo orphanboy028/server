@@ -60,6 +60,8 @@ const userSchema = new mongoose.Schema(
         message: "confirm password didn't match",
       },
     },
+
+    businessDetails: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
   },
   { timestamps: true }
 );
@@ -78,6 +80,14 @@ userSchema.methods.correctPassword = async function (
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
+
+// populate business
+userSchema.pre("find", function (next) {
+  this.find().populate({
+    path: "businessDetails",
+  });
+  next();
+});
 
 const User = mongoose.model("User", userSchema);
 

@@ -61,3 +61,12 @@ exports.updateCompanyLogo = catchAsync(async (req, res, next) => {
     me,
   });
 });
+
+exports.getAllUser = catchAsync(async (req, res, next) => {
+  const allUser = await User.find({ role: "user" });
+
+  res.status(200).json({
+    status: "Success",
+    allUser,
+  });
+});
