@@ -4,6 +4,7 @@ const authController = require("../controllers/authController");
 const productController = require("../controllers/ProdutsController");
 
 router.route("/get-all-products").get(productController.getAllProducts);
+router.route("/single-product/:slug").get(productController.getSingleProduct);
 
 router.use(authController.protect, authController.restricTO("user"));
 router.route("/creat-product").post(productController.createProduct);

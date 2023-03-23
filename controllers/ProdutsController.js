@@ -122,3 +122,14 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     allProducts,
   });
 });
+
+exports.getSingleProduct = catchAsync(async (req, res, next) => {
+  const { slug } = req.params;
+  const product = await Produts.findOne({ slug });
+
+  res.status(200).json({
+    status: "Success",
+    result: product.length,
+    product,
+  });
+});

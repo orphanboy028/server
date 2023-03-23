@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
+var slugify = require("slugify");
 
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
+  },
+  slug: {
+    type: String,
+    require: [true, "slug didn't work"],
+    unique: true,
   },
   images: [
     {
@@ -54,6 +60,22 @@ const productSchema = new mongoose.Schema({
 productSchema.pre("save", function (next) {
   // Access the user ID through `this.user`
   this.user = this.user || this.getQuery().user;
+  next();
+});
+
+// slug the sub-Category category
+productSchema.pre("save", function (next) {
+  this.slug = slugify(this.name, {
+    lower: false,
+  });
+  next();
+});
+
+// populate business
+productSchema.pre(/^find/, function (next) {
+  this.find().populate({
+    path: "user",
+  });
   next();
 });
 
